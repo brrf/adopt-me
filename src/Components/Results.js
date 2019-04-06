@@ -1,25 +1,36 @@
 import React from "react";
 import Pet from "./Pet";
 import pf from "petfinder-client";
+import { Consumer } from "./SearchContext";
+import SearchBox from "./SearchBox";
 
 const petfinder = pf({
 	key: process.env.API_KEY,
 	secret: process.env.API_SECRET
 });
 
-export default class Results extends React.Component {
+class Results extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			pets: []
 		};
+
+		this.search = this.search.bind(this);
 	}
+
 	componentDidMount() {
+		this.search();
+	}
+
+	search() {
 		petfinder.pet
 			.find({
 				output: "full",
-				location: "Chicago, IL"
+				location: this.props.searchParams.location,
+				animal: this.props.searchParams.animal,
+				breed: this.props.searchParams.breed
 			})
 			.then(data => {
 				let pets;
@@ -35,12 +46,14 @@ export default class Results extends React.Component {
 				this.setState({
 					pets
 				});
-			});
+			})
+			.catch(err => console.log(err));
 	}
 
 	render() {
 		return (
 			<div className="search">
+				<SearchBox search={this.search} />
 				{this.state.pets.map(pet => {
 					let breed;
 
@@ -64,4 +77,12 @@ export default class Results extends React.Component {
 			</div>
 		);
 	}
+}
+
+export default function ResultsWithContext(props) {
+	return (
+		<Consumer>
+			{context => <Results {...props} searchParams={context} />}
+		</Consumer>
+	);
 }

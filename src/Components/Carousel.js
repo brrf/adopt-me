@@ -27,10 +27,13 @@ export default class Carousel extends React.Component {
 
 	render() {
 		const { photos, active } = this.state;
+		const photo = photos
+			? photos[active].value
+			: "http://placecorgi.com/300/300";
 
 		return (
 			<div className="carousel">
-				<img src={photos[active].value} alt="primary animal" />
+				<img src={photo} alt="primary animal" />
 				{photos.length > 1 ? (
 					<div className="carousel-smaller">
 						{photos.map((photo, index) => (
