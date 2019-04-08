@@ -11,6 +11,7 @@ export default class Pet extends React.Component {
 		}
 
 		const hero = photos[0] ? photos[0].value : "http://placecorgi.com/300/300";
+
 		return (
 			<Link to={`/details/${id}`} className="pet">
 				<div className="image-container">

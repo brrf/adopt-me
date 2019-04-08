@@ -1,2 +1,7 @@
 node_modules
 .env
+__tests__
+dist
+.cache
+package-lock.json
+yarn.lock
